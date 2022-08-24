@@ -7,5 +7,6 @@ const verifyToken = require('../middlewares/verifyToken');
 router.post("/register", usersHandler.register);
 router.post("/login", usersHandler.login);
 router.get("/me", verifyToken, usersHandler.getUser);
+router.put("/update", verifyToken, usersHandler.update)
 
 module.exports = router;

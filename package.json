@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
+    "base64-img": "^1.0.4",
     "bcrypt": "^5.0.1",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
@@ -15,6 +16,7 @@
     "express": "~4.16.1",
     "fastest-validator": "^1.13.0",
     "http-errors": "~1.6.3",
+    "is-base64": "^1.1.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "~1.9.1",
     "mysql2": "^2.3.3",
