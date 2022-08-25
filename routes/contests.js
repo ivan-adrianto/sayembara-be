@@ -6,5 +6,6 @@ const verifyToken = require('../middlewares/verifyToken');
 
 router.get("/", verifyToken, contestsHandler.getContests);
 router.get("/detail/:id", verifyToken, contestsHandler.getContestDetail);
+router.get("/me", verifyToken, contestsHandler.myContests);
 
 module.exports = router;

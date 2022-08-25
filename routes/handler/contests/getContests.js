@@ -1,10 +1,9 @@
 const { Op } = require("sequelize");
-const { contest, category, User } = require("../../../models");
+const { contest, category, submission, User } = require("../../../models");
 contest.hasOne(category, { foreignKey: "id", sourceKey: "category_id" });
 contest.hasOne(User, {
   foreignKey: "id",
   sourceKey: "provider_id",
-  as: "provider",
 });
 
 module.exports = async (req, res) => {
@@ -20,9 +19,36 @@ module.exports = async (req, res) => {
         { model: category },
         { model: User, attributes: ["fullname"], as: "provider" },
       ],
-      attributes: ["id", "title", "created_at", "prize", "description", "due_date"],
+      attributes: [
+        "id",
+        "winner_id",
+        "title",
+        "created_at",
+        "prize",
+        "description",
+        "due_date",
+      ],
     });
-    res.json({
+
+    for (let i = 0; i < contests.length; i++) {
+      if (contests[i].winner_id === req.user.id) {
+        delete contests[i].dataValues.winner_id 
+        contests[i].dataValues = {
+          ...contests[i].dataValues,
+          join_status: "winner",
+        };
+      } else {
+        delete contests[i].dataValues.winner_id
+        const existingSubmission = await submission.findOne({
+          where: { contest_id: contests[i].id, participant_id: req.user.id },
+        });
+        contests[i].dataValues = {
+          ...contests[i].dataValues,
+          join_status: existingSubmission ? "joined" : "not join",
+        };
+      }
+    }
+    return res.json({
       status: "success",
       data: contests,
     });
