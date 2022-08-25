@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const { contest, category, User } = require("../../../models");
+const { contest, category, User, submission } = require("../../../models");
 contest.hasOne(category, { foreignKey: "id", sourceKey: "category_id" });
 contest.hasOne(User, {
   foreignKey: "id",
@@ -8,11 +8,10 @@ contest.hasOne(User, {
 
 module.exports = async (req, res) => {
   const id = req.params.id;
-  console.log('id', id)
   try {
     const contests = await contest.findOne({
       where: { id },
-      include: [{ model: category }, { model: User, attributes: ["fullname"] }],
+      include: [{ model: category }, { model: User, attributes: ["fullname"], as: "provider" }],
       attributes: [
         "id",
         "title",
@@ -23,6 +22,13 @@ module.exports = async (req, res) => {
         "announcement_date",
       ],
     });
+
+    const submissions = await submission.findAll({
+      where: { contest_id: id },
+      attributes: ["id", "thumbnail", "title", "description"],
+    });
+    contests.dataValues.submissions = submissions;
+
     res.json({
       status: "success",
       data: contests,
