@@ -26,6 +26,9 @@ module.exports = async (req, res) => {
       attributes: ["id", "thumbnail", "title", "description"],
     });
     contests.dataValues.submissions = submissions;
+    contests.dataValues.prize_text = contests.dataValues.prize
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
     res.json({
       status: "success",

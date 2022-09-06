@@ -32,13 +32,13 @@ module.exports = async (req, res) => {
 
     for (let i = 0; i < contests.length; i++) {
       if (contests[i].winner_id === req.user.id) {
-        delete contests[i].dataValues.winner_id 
+        delete contests[i].dataValues.winner_id;
         contests[i].dataValues = {
           ...contests[i].dataValues,
           join_status: "winner",
         };
       } else {
-        delete contests[i].dataValues.winner_id
+        delete contests[i].dataValues.winner_id;
         const existingSubmission = await submission.findOne({
           where: { contest_id: contests[i].id, participant_id: req.user.id },
         });
@@ -47,6 +47,9 @@ module.exports = async (req, res) => {
           join_status: existingSubmission ? "joined" : "not join",
         };
       }
+      contests[i].dataValues.prize_text = contests[i].dataValues.prize
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
     return res.json({
       status: "success",
