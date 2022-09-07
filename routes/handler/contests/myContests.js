@@ -1,4 +1,5 @@
 const { Op } = require("sequelize");
+const { prizeToText, timeDiff } = require("../../../helpers/converter");
 const { contest, submission, User } = require("../../../models");
 contest.hasOne(User, {
   foreignKey: "id",
@@ -32,6 +33,8 @@ module.exports = async (req, res) => {
         item.dataValues.winner_status = false
       }
       delete item.dataValues.winner_id
+      item.dataValues.prize_text = prizeToText(item.prize)
+      item.dataValues.posted_since = timeDiff(item.created_at)
       data.push(item);
     }
 

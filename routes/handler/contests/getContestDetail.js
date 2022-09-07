@@ -1,3 +1,4 @@
+const { timeDiff, prizeToText } = require("../../../helpers/converter");
 const { contest, category, User, submission } = require("../../../models");
 contest.hasOne(User, {
   foreignKey: "id",
@@ -26,10 +27,8 @@ module.exports = async (req, res) => {
       attributes: ["id", "thumbnail", "title", "description"],
     });
     contests.dataValues.submissions = submissions;
-    contests.dataValues.prize_text = contests.dataValues.prize
-        .toString()
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-
+    contests.dataValues.prize_text = prizeToText(contests.dataValues.prize);
+    contests.dataValues.posted_since = timeDiff(contests.dataValues.created_at);
     res.json({
       status: "success",
       data: contests,

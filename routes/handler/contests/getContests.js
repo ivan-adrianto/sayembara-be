@@ -1,4 +1,5 @@
 const { Op } = require("sequelize");
+const { timeDiff, prizeToText } = require("../../../helpers/converter");
 const { contest, category, submission, User } = require("../../../models");
 contest.hasOne(category, { foreignKey: "id", sourceKey: "category_id" });
 contest.hasOne(User, {
@@ -38,6 +39,7 @@ module.exports = async (req, res) => {
           join_status: "winner",
         };
       } else {
+        const item = contests[i].dataValues
         delete contests[i].dataValues.winner_id;
         const existingSubmission = await submission.findOne({
           where: { contest_id: contests[i].id, participant_id: req.user.id },
@@ -47,9 +49,10 @@ module.exports = async (req, res) => {
           join_status: existingSubmission ? "joined" : "not join",
         };
       }
-      contests[i].dataValues.prize_text = contests[i].dataValues.prize
-        .toString()
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      contests[i].dataValues.prize_text = prizeToText(contests[i].dataValues.prize)
+      contests[i].dataValues.posted_since = timeDiff(
+        contests[i].dataValues.created_at
+      );
     }
     return res.json({
       status: "success",
