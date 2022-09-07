@@ -36,4 +36,35 @@ const prizeToText = (value) => {
   return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 };
 
-module.exports = { timeDiff, prizeToText };
+const formatDate = (value) => {
+  const days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ];
+  const dayIndex = new Date(value).getDay();
+  const monthIndex = new Date(value).getMonth();
+  const date = new Date(value).getDate();
+  const year = new Date(value).getFullYear();
+  return `${days[dayIndex]}, ${date} ${months[monthIndex]} ${year}`;
+};
+
+module.exports = { timeDiff, prizeToText, formatDate };

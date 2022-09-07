@@ -1,4 +1,8 @@
-const { timeDiff, prizeToText } = require("../../../helpers/converter");
+const {
+  timeDiff,
+  prizeToText,
+  formatDate,
+} = require("../../../helpers/converter");
 const { contest, category, User, submission } = require("../../../models");
 contest.hasOne(User, {
   foreignKey: "id",
@@ -29,6 +33,7 @@ module.exports = async (req, res) => {
     contests.dataValues.submissions = submissions;
     contests.dataValues.prize_text = prizeToText(contests.dataValues.prize);
     contests.dataValues.posted_since = timeDiff(contests.dataValues.created_at);
+    contests.dataValues.due_date = formatDate(contests.dataValues.due_date);
     res.json({
       status: "success",
       data: contests,

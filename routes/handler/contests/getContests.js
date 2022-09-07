@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const { timeDiff, prizeToText } = require("../../../helpers/converter");
+const { timeDiff, prizeToText, formatDate } = require("../../../helpers/converter");
 const { contest, category, submission, User } = require("../../../models");
 contest.hasOne(category, { foreignKey: "id", sourceKey: "category_id" });
 contest.hasOne(User, {
@@ -53,6 +53,7 @@ module.exports = async (req, res) => {
       contests[i].dataValues.posted_since = timeDiff(
         contests[i].dataValues.created_at
       );
+      contests[i].dataValues.due_date = formatDate(contests[i].dataValues.due_date)
     }
     return res.json({
       status: "success",
