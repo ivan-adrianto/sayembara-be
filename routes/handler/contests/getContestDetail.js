@@ -34,6 +34,7 @@ module.exports = async (req, res) => {
     contests.dataValues.prize_text = prizeToText(contests.dataValues.prize);
     contests.dataValues.posted_since = timeDiff(contests.dataValues.created_at);
     contests.dataValues.due_date = formatDate(contests.dataValues.due_date);
+    contests.dataValues.announcement_date = formatDate(contest.dataValues.announcement_date)
     res.json({
       status: "success",
       data: contests,
