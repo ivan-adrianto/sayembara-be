@@ -20,6 +20,7 @@ module.exports = {
         description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Incidunt maiores ratione veritatis, fugit blanditiis molestias rerum quibusdam deserunt vitae quasi id quos dicta, sed excepturi laborum facilis odio quae. Aliquam!",
         category_id: 1,
         provider_id: 1,
+        winner_id: 1,
         created_at: new Date(),
         updated_at: new Date()
       },
