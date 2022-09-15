@@ -3,7 +3,7 @@ const {
   prizeToText,
   formatDate,
 } = require("../../../helpers/converter");
-const { contest, category, User, submission } = require("../../../models");
+const { contest, User, submission } = require("../../../models");
 contest.hasOne(User, {
   foreignKey: "id",
   sourceKey: "provider_id",
@@ -30,14 +30,18 @@ module.exports = async (req, res) => {
       where: { contest_id: id },
       attributes: ["id", "thumbnail", "title", "description"],
     });
-    contests.dataValues.submissions = submissions;
-    contests.dataValues.prize_text = prizeToText(contests.dataValues.prize);
-    contests.dataValues.posted_since = timeDiff(contests.dataValues.created_at);
-    contests.dataValues.due_date = formatDate(contests.dataValues.due_date);
-    contests.dataValues.announcement_date = formatDate(contest.dataValues.announcement_date)
+    const data = {
+      ...contests.dataValues,
+      submissions,
+      prize_text: prizeToText(contests.dataValues.prize),
+      posted_since: timeDiff(contests.dataValues.created_at),
+      due_date: formatDate(contests.dataValues.due_date),
+      announcement_date: formatDate(contests.dataValues.announcement_date),
+      status: new Date() < new Date(contests.dataValues.due_date) ? "Open" : "Closed",
+    };
     res.json({
       status: "success",
-      data: contests,
+      data,
     });
   } catch (error) {
     res.status(500).json({
