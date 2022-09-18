@@ -23,18 +23,6 @@ module.exports = async (req, res) => {
       });
     }
 
-    const participant_id = req.user.id;
-    const userHasSubmitted = await submission.findOne({
-      where: { participant_id },
-    });
-
-    if (userHasSubmitted) {
-      return res.status(409).json({
-        status: "error",
-        message: "user already submitted",
-      });
-    }
-
     if (!isBase64(req.body.images[0], { mimeRequired: true })) {
       return res
         .status(400)
@@ -50,7 +38,7 @@ module.exports = async (req, res) => {
     let thumbnail = `${FOLDER_URL}/images/${filename}`;
 
     const dataSubmission = {
-      participant_id,
+      participant_id: req.user.id,
       contest_id: req.body.contest_id,
       thumbnail,
       title: req.body.title,
