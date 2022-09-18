@@ -19,7 +19,7 @@ module.exports = {
         announcement_date: newDate(12),
         description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Incidunt maiores ratione veritatis, fugit blanditiis molestias rerum quibusdam deserunt vitae quasi id quos dicta, sed excepturi laborum facilis odio quae. Aliquam!",
         category_id: 1,
-        provider_id: 1,
+        provider_id: 3,
         winner_id: 1,
         created_at: new Date(),
         updated_at: new Date()
@@ -34,7 +34,7 @@ module.exports = {
         payment_status: "Unpaid",
         description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Incidunt maiores ratione veritatis, fugit blanditiis molestias rerum quibusdam deserunt vitae quasi id quos dicta, sed excepturi laborum facilis odio quae. Aliquam!",
         category_id: 1,
-        provider_id: 1,
+        provider_id: 3,
         created_at: new Date(),
         updated_at: new Date()
       },
@@ -48,7 +48,7 @@ module.exports = {
         payment_status: "Unpaid",
         description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Incidunt maiores ratione veritatis, fugit blanditiis molestias rerum quibusdam deserunt vitae quasi id quos dicta, sed excepturi laborum facilis odio quae. Aliquam!",
         category_id: 2,
-        provider_id: 2,
+        provider_id: 3,
         created_at: new Date(),
         updated_at: new Date()
       }

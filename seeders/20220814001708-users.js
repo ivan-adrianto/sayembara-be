@@ -27,7 +27,7 @@ module.exports = {
         fullname: "hiyori",
         email: "hiyori@mail.com",
         password: await bcrypt.hash("password", 10),
-        role: "participant",
+        role: "provider",
         created_at: new Date(),
         updated_at: new Date(),
       },
