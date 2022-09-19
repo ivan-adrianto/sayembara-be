@@ -31,7 +31,7 @@ module.exports = async (req, res) => {
     if (userHasSubmitted) {
       return res.status(409).json({
         status: "error",
-        message: "user already submitted",
+        message: "You already submitted your work. You can only submit your work once per contest.",
       });
     }
 
