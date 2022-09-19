@@ -23,6 +23,18 @@ module.exports = async (req, res) => {
       });
     }
 
+    const participant_id = req.user.id;
+    const userHasSubmitted = await submission.findOne({
+      where: { participant_id },
+    });
+
+    if (userHasSubmitted) {
+      return res.status(409).json({
+        status: "error",
+        message: "user already submitted",
+      });
+    }
+
     if (!isBase64(req.body.images[0], { mimeRequired: true })) {
       return res
         .status(400)
