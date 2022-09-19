@@ -8,6 +8,7 @@ contest.hasOne(User, {
   foreignKey: "id",
   sourceKey: "provider_id",
 });
+const { Op } = require("sequelize")
 
 module.exports = async (req, res) => {
   const id = req.params.id;
@@ -26,13 +27,17 @@ module.exports = async (req, res) => {
       ],
     });
 
-    const submissions = await submission.findAll({
-      where: { contest_id: id },
+    const mySubmissions = await submission.findAll({
+      where: { contest_id: id, participant_id: req.user.id },
+      attributes: ["id", "thumbnail", "title", "description"],
+    });
+    const othersSubmissions = await submission.findAll({
+      where: { contest_id: id, participant_id: {[Op.not]: req.user.id} },
       attributes: ["id", "thumbnail", "title", "description"],
     });
     const data = {
       ...contests.dataValues,
-      submissions,
+      submissions: [...mySubmissions, ...othersSubmissions],
       prize_text: prizeToText(contests.dataValues.prize),
       posted_since: timeDiff(contests.dataValues.created_at),
       due_date: formatDate(contests.dataValues.due_date),
