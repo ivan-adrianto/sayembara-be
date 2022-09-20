@@ -25,7 +25,7 @@ module.exports = async (req, res) => {
 
     const participant_id = req.user.id;
     const userHasSubmitted = await submission.findOne({
-      where: { participant_id },
+      where: { participant_id, contest_id: req.body.contest_id },
     });
 
     if (userHasSubmitted) {

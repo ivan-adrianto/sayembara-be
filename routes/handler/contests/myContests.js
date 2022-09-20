@@ -12,6 +12,8 @@ contest.hasOne(User, {
 });
 
 module.exports = async (req, res) => {
+  const category_id = req.query.category_id || "";
+  const title = req.query.title || "";
   try {
     const submissions = await submission.findAll({
       where: { participant_id: req.user.id },
@@ -19,7 +21,11 @@ module.exports = async (req, res) => {
     let data = [];
     for (let i = 0; i < submissions.length; i++) {
       const item = await contest.findOne({
-        where: { id: submissions[i].contest_id },
+        where: {
+          id: submissions[i].contest_id,
+          category_id: { [Op.like]: `%${category_id}%` },
+          title: { [Op.like]: `%${title}%` },
+        },
         include: [{ model: User, attributes: ["fullname"], as: "provider" }],
         attributes: [
           "id",
@@ -31,16 +37,18 @@ module.exports = async (req, res) => {
           "due_date",
         ],
       });
-      if (item.dataValues.winner_id == req.user.id) {
-        item.dataValues.winner_status = true;
-      } else {
-        item.dataValues.winner_status = false;
+      if (item) {
+        if (item.dataValues.winner_id == req.user.id) {
+          item.dataValues.join_status = "winner";
+        } else {
+          item.dataValues.join_status = "joined";
+        }
+        delete item.dataValues.winner_id;
+        item.dataValues.prize_text = prizeToText(item.prize);
+        item.dataValues.posted_since = timeDiff(item.created_at);
+        item.dataValues.due_date = formatDate(item.dataValues.due_date);
+        data.push(item);
       }
-      delete item.dataValues.winner_id;
-      item.dataValues.prize_text = prizeToText(item.prize);
-      item.dataValues.posted_since = timeDiff(item.created_at);
-      item.dataValues.due_date = formatDate(item.dataValues.due_date);
-      data.push(item);
     }
 
     return res.json({
