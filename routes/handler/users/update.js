@@ -12,7 +12,6 @@ module.exports = async (req, res) => {
       location: "string|optional",
       account_number: "number|optional",
       bank: "string|optional",
-      email: "email|empty:false",
       avatar: "string|optional",
     };
 
@@ -33,22 +32,8 @@ module.exports = async (req, res) => {
       });
     }
 
-    const email = req.body.email;
-    if (email) {
-      const checkEmail = await User.findOne({
-        where: { email },
-      });
-
-      if (checkEmail && email !== user.email) {
-        return res.status(409).json({
-          status: "error",
-          message: "email already exist",
-        });
-      }
-    }
-
     let avatar = "";
-    if (req.body.avatar) {
+    if (req.body.avatar && req.body.avatar !== user.avatar) {
       const image = req.body.avatar;
 
       if (!isBase64(image, { mimeRequired: true })) {
@@ -64,7 +49,6 @@ module.exports = async (req, res) => {
 
     await user.update({
       fullname: req.body.fullname,
-      email,
       avatar: avatar || user.avatar,
       bank: req.body.bank || user.bank,
       account_number: req.body.account_number || user.account_number,
@@ -76,7 +60,6 @@ module.exports = async (req, res) => {
       data: {
         id: user.id,
         fullname: req.body.fullname,
-        email,
         avatar,
         bank: req.body.bank || user.bank,
         account_number: req.body.account_number || user.account_number,
