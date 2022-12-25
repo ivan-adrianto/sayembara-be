@@ -24,9 +24,9 @@ app.use(express.static(path.join(__dirname, "public")));
 const corsOpts = {
   origin: "*",
 
-  methods: ["GET", "POST"],
+  methods: ["GET", "POST", "PUT"],
 
-  allowedHeaders: ["Content-Type"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 app.use(cors(corsOpts));
