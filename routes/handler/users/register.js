@@ -1,7 +1,13 @@
 const bcrypt = require("bcrypt");
 const { User } = require("../../../models");
 const Validator = require("fastest-validator");
+const jwt = require("jsonwebtoken");
 const v = new Validator();
+const {
+  JWT_SECRET,
+  JWT_ACCESS_TOKEN_EXPIRED,
+} = process.env;
+
 
 module.exports = async (req, res) => {
   try {
@@ -42,13 +48,22 @@ module.exports = async (req, res) => {
 
     const createdUser = await User.create(data);
 
+    const dataCreatedUser = {
+      id: createdUser.id,
+      fullname: createdUser.fullname,
+      email: createdUser.email,
+      role: createdUser.role,
+    };
+  
+    const token = jwt.sign({ data: dataCreatedUser }, JWT_SECRET, {
+      expiresIn: JWT_ACCESS_TOKEN_EXPIRED, 
+    });
+
     return res.json({
       status: "success",
       data: {
-        id: createdUser.id,
-        fullname: createdUser.fullname,
-        email: createdUser.email,
-        role: createdUser.role,
+        ...dataCreatedUser,
+        token
       },
     });
   } catch (error) {
