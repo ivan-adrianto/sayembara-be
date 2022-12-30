@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
     });
 
     if (contests.length === 0) {
-      return res.status(404).json({ msg: "Contest not found" });
+      return res.status(404).json({ message: "Contest not found" });
     }
 
     for (let i = 0; i < contests.length; i++) {
