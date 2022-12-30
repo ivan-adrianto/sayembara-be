@@ -31,6 +31,10 @@ module.exports = async (req, res) => {
       ],
     });
 
+    if (contests.length === 0) {
+      return res.status(404).json({ msg: "Contest not found" });
+    }
+
     for (let i = 0; i < contests.length; i++) {
       if (contests[i].winner_id === req.user.id) {
         delete contests[i].dataValues.winner_id;
