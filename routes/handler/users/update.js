@@ -46,10 +46,14 @@ module.exports = async (req, res) => {
       const filename = filepath.split("/").pop();
       avatar = `${FOLDER_URL}/images/${filename}`;
     }
+    
+    if (req.body.avatar === null) {
+      avatar = null;
+    }
 
     await user.update({
       fullname: req.body.fullname,
-      avatar: avatar || user.avatar,
+      avatar: avatar === "" ? user.avatar : avatar,
       bank: req.body.bank || user.bank,
       account_number: req.body.account_number || user.account_number,
       location: req.body.location || user.location,
