@@ -4,8 +4,6 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require('cors');
-const https = require('https');
-const fs = require('fs');
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
@@ -53,12 +51,5 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
-
-const sslOptions = {
-  key: fs.readFileSync('certificate-ssl/private.key'),
-  cert: fs.readFileSync('certificate-ssl/certificate.crt')
-};
-
-https.createServer(sslOptions, app).listen(433)
 
 module.exports = app;
